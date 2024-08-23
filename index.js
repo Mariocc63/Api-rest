@@ -1,8 +1,13 @@
 const express = require("express");
 const app = express();
-const { sequelize, ConexionBD} = require("./config/database.js")
+const {ConexionBD} = require("./config/database.js")
+
+const estadoRoutes = require("./routes/EstadoRoute.js")
+const usuarioRoutes = require("./routes/UsuarioRoute.js")
 
 app.use(express.json());
+app.use("/api", estadoRoutes)
+app.use("/api", usuarioRoutes)
 
 ConexionBD().then(() => {
     app.listen(3000, () => {

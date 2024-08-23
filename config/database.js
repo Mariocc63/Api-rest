@@ -3,13 +3,7 @@ const {Sequelize} = require("sequelize")
 const sequelize = new Sequelize("CarritoCompras", "admin","12345", {
     host: "Mario",
     port: 1433,
-    dialect: "mssql",
-   // dialectOptions: {
-        // options: {
-        //     trustedConnection: true
-        // },
-          
-    //}
+    dialect: "mssql"
 });
 
 async function ConexionBD() {
@@ -18,7 +12,7 @@ async function ConexionBD() {
         console.log("Base de datos conectada correctamente")
     }
     catch(error) {
-        console.error("No fue posible conectarse a la base de datos",error)
+        console.error("No fue posible conectarse a la base de datos")
         process.exit(1);
     }
 }
