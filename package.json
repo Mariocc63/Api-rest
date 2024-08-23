@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "express": "^4.19.2",
+    "mssql": "^11.0.1",
     "sequelize": "^6.37.3",
     "tedious": "^19.0.0"
   }
