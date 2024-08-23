@@ -1,14 +1,15 @@
 const {Sequelize} = require("sequelize")
 
-const sequelize = new Sequelize("CarritoCompras", "","", {
+const sequelize = new Sequelize("CarritoCompras", "admin","12345", {
     host: "Mario",
+    port: 1433,
     dialect: "mssql",
-    dialectOptions: {
-        options: {
-            trustedConnection: true
-        },
+   // dialectOptions: {
+        // options: {
+        //     trustedConnection: true
+        // },
           
-    }
+    //}
 });
 
 async function ConexionBD() {
