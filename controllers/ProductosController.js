@@ -1,5 +1,6 @@
 const sequelize = require("../config/database").sequelize;
 
+
 exports.crearProductos = async (req,res) => {
     const { categoriaproductos_idcategoriaproductos, 
         usuarios_idusuarios,
@@ -13,8 +14,13 @@ exports.crearProductos = async (req,res) => {
 
     try {
 
-        await sequelize.query(
-            "EXEC InsertarProductos :categoriaproductos_idcategoriaproductos, " +
+        //let imagen = fs.readFileSync(foto).toString("hex"); 
+
+        await sequelize.query("declare @imagen varbinary(max); " +
+            "select @imagen = BulkColumn " +
+            "from OPENROWSET(BULK :foto, SINGLE_BLOB) as imagen; " +
+            "EXEC InsertarProductos " +
+            ":categoriaproductos_idcategoriaproductos, " +
             ":usuarios_idusuarios, " +
              ":nombre, " + 
              ":marca, " +
@@ -22,7 +28,7 @@ exports.crearProductos = async (req,res) => {
              ":stock, " +
              ":estados_idestados, " +
              ":precio, " +
-             ":foto" ,
+             "@foto = @imagen" ,
             {
                 replacements: { 
                     categoriaproductos_idcategoriaproductos, 
@@ -56,18 +62,21 @@ exports.actualizarProductos = async (req, res) => {
 
     try {
 
-        await sequelize.query(
-            "EXEC ActualizarProductos @idproductos = :idproductos, "+
+        await sequelize.query("declare @imagen varbinary(max); " +
+            "select @imagen = BulkColumn " +
+            "from OPENROWSET(BULK :foto, SINGLE_BLOB) as imagen; " +
+            "EXEC ActualizarProductos " + 
+            "@idproductos = :idproductos, "+
             "@categoriaproductos_idcategoriaproductos = :categoriaproductos_idcategoriaproductos, " +
-            "@usuarios_idusuarios = usuarios_idusuarios:, " +
+            "@usuarios_idusuarios = :usuarios_idusuarios, " +
             "@nombre = :nombre, " +
             "@marca = :marca, " +
             "@codigo = :codigo, " + 
             "@stock = :stock, " +
             "@estados_idestados = :estados_idestados, " +
-            "@precio = :precio",
-            "@fecha_creacion = :fecha_creacion",
-            "@foto = :foto",
+            "@precio = :precio, " +
+            "@fecha_creacion = :fecha_creacion, " +
+            "@foto = @imagen",
             {
                 replacements: { 
                     idproductos,
