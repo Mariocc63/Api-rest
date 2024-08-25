@@ -10,8 +10,7 @@ exports.crearEstado = async (req,res) => {
                 type: sequelize.QueryTypes.INSERT
             }
         );
-        const estadoID = resultado[0].id;
-        res.status(200).json({id: estadoID, estado});
+        res.status(200).json({message: "Estado ingresado correctamente"});
     } 
     catch (error) {
         res.status(400).json({error: "Error al crear el estado"});
@@ -31,7 +30,7 @@ exports.actualizarEstado = async (req, res) => {
                 type: sequelize.QueryTypes.RAW
             }
         );
-        res.status(200).json({idestados, estado});
+        res.status(200).json({message: "Estado actualizado correctamente"});
     }
     catch (error) {
         console.error("Error al actualizar el estado", error)

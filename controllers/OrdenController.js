@@ -104,7 +104,7 @@ exports.actualizarOrden = async (req, res) => {
             "EXEC ActualizarOrdernes " + 
             "@idorden = :idorden, "+
             //":usuarios_idusuarios, " +
-            //":estados_idestados, " +
+            "@estados_idestados = :estados_idestados, " +
             "@fecha_creacion = :fecha_creacion, " +
             "@nombre_completo = :nombre_completo, " +
             "@direccion = :direccion, " +
@@ -116,7 +116,7 @@ exports.actualizarOrden = async (req, res) => {
                 replacements: { 
                     idorden, 
                     //usuarios_idusuarios: campos.usuarios_idusuarios || null,
-                    //estados_idestados: campos.estados_idestados || null,
+                    estados_idestados: campos.estados_idestados || null,
                     fecha_creacion: campos.fecha_creacion || null,
                     nombre_completo: campos.nombre_completo || null,
                     direccion: campos.direccion || null,
