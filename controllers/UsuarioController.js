@@ -1,6 +1,9 @@
 const sequelize = require("../config/database").sequelize;
 const bcrypt = require("bcrypt");
+const { QueryTypes } = require("sequelize");
+const jwt = require("jsonwebtoken");
 const saltoRondas = 10; //costo del proceso de encriptacion
+const SECRET_KEY = '12345';
 
 exports.crearUsuario= async (req,res) => {
     const { rol_idrol, 
@@ -89,6 +92,44 @@ exports.actualizarUsuario = async (req, res) => {
     catch (error) {
         console.error("Error al actualizar el usuario", error)
         res.status(500).json({error: "Error al actualizar el usuario"});
+    }   
+}
+
+
+exports.login = async (req, res) => {
+    const { correo_electronico, contrasenia } = req.body;
+
+    try
+    {
+    const password = await sequelize.query("Select contrasenia from usuarios " + 
+        "where correo_electronico = :correo_electronico" ,
+        {
+            replacements: {
+                correo_electronico
+            },
+            type: sequelize.QueryTypes.SELECT
+        });
+        
+        if(password.length > 0) {
+            //console.log(password[0].contrasenia);
+            //console.log(await bcrypt.hash(contrasenia, saltoRondas));
+
+            const contraseñavalida = await bcrypt.compare(contrasenia, password[0].contrasenia);
+            //console.log(contraseñavalida);
+
+            if(contraseñavalida) {
+                const token = jwt.sign({ correo_electronico }, SECRET_KEY, { expiresIn: '1h' });
+                return res.status(200).json({message: token});
+            }
+            else {
+                return res.status(404).json({message: "Contraseña incorrecta"});
+            }
+        }
+        else {
+            return res.status(404).json({message: "Usuario no encontrado"});
+        }
     }
-    
-};
+    catch (error) {
+        return res.status(400).json({message: "Error al iniciar sesion"});
+    }
+}
