@@ -1,9 +1,9 @@
 const sequelize = require("../config/database").sequelize;
 const bcrypt = require("bcrypt");
 const { QueryTypes } = require("sequelize");
-const jwt = require("jsonwebtoken");
 const saltoRondas = 10; //costo del proceso de encriptacion
-const SECRET_KEY = '12345';
+const {generarToken} = require("../middleware.js");
+
 
 exports.crearUsuario= async (req,res) => {
     const { rol_idrol, 
@@ -118,7 +118,7 @@ exports.login = async (req, res) => {
             //console.log(contraseñavalida);
 
             if(contraseñavalida) {
-                const token = jwt.sign({ correo_electronico }, SECRET_KEY, { expiresIn: '1h' });
+                const token = generarToken(correo_electronico);
                 return res.status(200).json({message: token});
             }
             else {

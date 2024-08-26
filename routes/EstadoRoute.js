@@ -1,11 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const EstadoController = require("../controllers/EstadoController.js");
+const {autenticarToken} = require("../middleware.js");
 
-router.post("/estados",EstadoController.crearEstado);
-/* router.get('/test', (req, res) => {
-    res.status(200).send('Ruta de prueba funciona');
-  }); */
-router.put("/estados/:idestados",EstadoController.actualizarEstado);
+router.post("/estados", autenticarToken, EstadoController.crearEstado);
+router.put("/estados/:idestados", autenticarToken, EstadoController.actualizarEstado);
 
 module.exports = router;
