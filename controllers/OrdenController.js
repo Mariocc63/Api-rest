@@ -21,15 +21,15 @@ exports.crearOrden= async (req,res) => {
 
      
         const [ResultadoOrden] = await sequelize.query(
-            "EXEC InsertarOrdenes " +
-            ":usuarios_idusuarios, " +
-            ":estados_idestados, " +
-            ":nombre_completo, " +
-            ":direccion, " +
-            ":telefono, " +
-            ":correo_electronico, " + 
-            ":fecha_entrega, " +
-            ":total_orden" ,
+            `EXEC InsertarOrdenes
+            :usuarios_idusuarios,
+            :estados_idestados,
+            :nombre_completo,
+            :direccion,
+            :telefono,
+            :correo_electronico, 
+            :fecha_entrega,
+            :total_orden` ,
             {
                 replacements: { 
                     usuarios_idusuarios, 
@@ -56,12 +56,12 @@ exports.crearOrden= async (req,res) => {
                 subtotal} = detalle;
 
                 await sequelize.query(
-                    "EXEC InsertarOrdenDetalles " + 
-                    ":orden_idorden, " +
-                    ":productos_idproductos, " +
-                    ":cantidad, " +
-                    ":precio, " +
-                    ":subtotal",
+                    `EXEC InsertarOrdenDetalles
+                    :orden_idorden,
+                    :productos_idproductos,
+                    :cantidad,
+                    :precio,
+                    :subtotal`,
                     {
                         replacements: {
                             orden_idorden,
@@ -79,13 +79,13 @@ exports.crearOrden= async (req,res) => {
         //console.log(orden_idorden);
         await transaccion.commit();
 
-        res.status(200).json({message: "Order y detalles de orden agregados correctamente"});
+        res.status(200).json({message: "Orden y detalles de orden agregados correctamente"});
         
     } 
     catch (error) {
         await transaccion.rollback();
-        res.status(400).json({error: "Error al crear la orden y detalles de orden"});
-        console.log(error);
+        res.status(400).json({message: "Error al crear la orden y detalles de orden"});
+        //console.log(error);
     }
 }
 
@@ -101,16 +101,15 @@ exports.actualizarOrden = async (req, res) => {
     try {
 
         await sequelize.query(
-            "EXEC ActualizarOrdernes " + 
-            "@idorden = :idorden, "+
-            //":usuarios_idusuarios, " +
-            "@estados_idestados = :estados_idestados, " +
-            "@fecha_creacion = :fecha_creacion, " +
-            "@nombre_completo = :nombre_completo, " +
-            "@direccion = :direccion, " +
-            "@telefono = :telefono, " +
-            "@correo_electronico = :correo_electronico, " + 
-            "@fecha_entrega = :fecha_entrega" ,
+            `EXEC ActualizarOrdernes
+            @idorden = :idorden,
+            @estados_idestados = :estados_idestados,
+            @fecha_creacion = :fecha_creacion,
+            @nombre_completo = :nombre_completo,
+            @direccion = :direccion,
+            @telefono = :telefono,
+            @correo_electronico = :correo_electronico, 
+            @fecha_entrega = :fecha_entrega` ,
             //":total_orden",
             {
                 replacements: { 
@@ -131,8 +130,57 @@ exports.actualizarOrden = async (req, res) => {
         res.status(200).json({message: "Actualizado correctamente"});
     }
     catch (error) {
+        //console.error("Error al actualizar la orden", error)
+        res.status(500).json({meesage: "Error al actualizar la orden"});
+    }
+
+
+    
+};
+
+exports.verOrdenes = async (req, res) => {
+
+    try {
+
+        const ordenes = await sequelize.query(
+            `select * from Ver_Ordenes_Confirmadas` ,
+            //":total_orden",
+            {
+                
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+        res.status(200).json({ordenes});
+    }
+    catch (error) {
         console.error("Error al actualizar la orden", error)
-        res.status(500).json({error: "Error al actualizar la orden"});
+        res.status(500).json({meesage: "Error al ver las ordenes confirmadas"});
     }
     
 };
+
+exports.verOrdenesDetalles = async (req, res) => {
+
+    const {orden_idorden} = req.params
+
+    try {
+
+        const detallesorden = await sequelize.query(
+            `select * from ordendetalles
+            where orden_idorden = :orden_idorden` ,
+            {
+                replacements: {
+                    orden_idorden
+                },
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+        res.status(200).json({detallesorden});
+    }
+    catch (error) {
+        console.error("Error al ver los detalles de orden", error)
+        res.status(500).json({meesage: "Error al ver los detalles de orden"});
+    }
+    
+};
+

@@ -3,8 +3,10 @@ const router = express.Router();
 const OrdenController = require("../controllers/OrdenController.js");
 const {autenticarToken} = require("../middleware.js")
 
-router.post("/orden/detalles",OrdenController.crearOrden);
+router.post("/orden/detalles", autenticarToken, OrdenController.crearOrden);
 router.put("/orden/detalles/:idorden", autenticarToken, OrdenController.actualizarOrden)
+router.get("/verordenes", autenticarToken, OrdenController.verOrdenes)
+router.get("/verordenes/detalles/:orden_idorden", autenticarToken, OrdenController.verOrdenesDetalles)
 
 
 module.exports = router;

@@ -5,6 +5,8 @@ const {autenticarToken} = require("../middleware.js")
 
 router.post("/categoriaproductos", autenticarToken, CategoriaProductosController.crearCategoriaProductos);
 router.put("/categoriaproductos/:idcategoriaproductos", autenticarToken, CategoriaProductosController.actualizarCategoriaProductos)
+router.get("/vercategoriaproductos", autenticarToken, CategoriaProductosController.verCategoriaProductosActivos)
+
 //router.put("/estados/:idestados",EstadoController.actualizarEstado);
 
 module.exports = router;

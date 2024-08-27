@@ -3,10 +3,10 @@ const SECRET_KEY = '12345'; //palabra clave
 
     function generarToken (datos) {
         try {
-            return jwt.sign({ datos }, SECRET_KEY, { expiresIn: '1h' });
+            return jwt.sign({ datos }, SECRET_KEY, { expiresIn: '24h' });
         }
         catch(error) {
-            return error;
+            return;
         }
         
     }
