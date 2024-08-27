@@ -14,7 +14,8 @@ exports.crearUsuario= async (req,res) => {
         telefono, 
         fecha_nacimiento} = req.body;
 
-        const usuario = await sequelize.query("select * from usuarios where correo_electronico = :correo_electronico",
+        const usuario = await sequelize.query(`select * from usuarios 
+            where correo_electronico = :correo_electronico`,
             {
                 replacements: {
                     correo_electronico
