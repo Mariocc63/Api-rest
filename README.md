@@ -16,7 +16,7 @@
 
 Endpoints importantes creados:
 
-Todos los endpoint a excepcion de login están protegidos por un token y por el rol del usuario. El id del rol del usuario debe ser 1 (Operador administrativo) para acceder
+Todos los endpoint a excepcion de login están protegidos por un token y por el rol del usuario. Los datos de inicio de sesión deben ser del Operador administrativo para acceder (idrol = 1)
 
 1. login (POST): http://localhost:3000/api/login
    
