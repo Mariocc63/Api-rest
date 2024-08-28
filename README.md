@@ -185,29 +185,29 @@ Todos los endpoint a excepcion de login están protegidos por un token y por el 
      
       "detalles_orden": [
      
-         {
-       
-         "productos_idproductos": idproducto,
-    
-         "cantidad": X,
-       
-         "precio": XX,
-       
-         "subtotal": XX
-       
-         },
-       
-         {
-       
-         "productos_idproductos": idproducto,
-       
-         "cantidad": X,
-       
-         "precio": XX,
-       
-         "subtotal": XX
-       
-         }
+           {
+         
+           "productos_idproductos": idproducto,
+      
+           "cantidad": X,
+         
+           "precio": XX,
+         
+           "subtotal": XX
+         
+           },
+         
+           {
+         
+           "productos_idproductos": idproducto,
+         
+           "cantidad": X,
+         
+           "precio": XX,
+         
+           "subtotal": XX
+         
+           }
      
        ]
      
