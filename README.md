@@ -114,11 +114,11 @@ Todos los endpoint a excepcion de login están protegidos por un token y por el 
   
       Nota: Este endpoint permite actualizar cualquier campo sin importar si se ingresa el campo o no
     
-     {
-    
-      "nombre": "Nuevo nombre de categoria"
+       {
       
-     }
+        "nombre": "Nuevo nombre de categoria"
+        
+       }
   
 
 5. Productos:
@@ -211,7 +211,7 @@ Todos los endpoint a excepcion de login están protegidos por un token y por el 
      
        ]
      
-    }
+      }
    
 
    * Actualización de ordenes (PUT); http://localhost:3000/api/orden/detalles/idorden
