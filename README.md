@@ -16,7 +16,7 @@
 
 Endpoints importantes creados:
 
-(Todos los endpoint a excepcion de login están protegidos por un token y por el rol del usuario. El id del rol del usuario debe ser 1 (Operador administrativo) para acceder)
+Todos los endpoint a excepcion de login están protegidos por un token y por el rol del usuario. El id del rol del usuario debe ser 1 (Operador administrativo) para acceder
 
 1. login (POST): http://localhost:3000/api/login
    
@@ -31,7 +31,7 @@ Endpoints importantes creados:
 
 2. Estados:
    
-   Creación de Estados (POST): http://localhost:3000/api/estados/
+   * Creación de Estados (POST): http://localhost:3000/api/estados/
    
    {
    
@@ -51,7 +51,7 @@ Endpoints importantes creados:
 
 3. Usuarios:
    
-   Creación de Usuarios (POST): http://localhost:3000/api/usuario
+   * Creación de Usuarios (POST): http://localhost:3000/api/usuario
    
    {
    
@@ -72,7 +72,7 @@ Endpoints importantes creados:
     }
 
   
-   Actualización de Usuarios (PUT): http://localhost:3000/api/usuario/idusuario
+   * Actualización de Usuarios (PUT): http://localhost:3000/api/usuario/idusuario
   
    Nota: Este endpoint permite actualizar cualquier campo sin importar si se ingresa el campo o no
   
@@ -97,7 +97,7 @@ Endpoints importantes creados:
   
 4. Categoria de productos:
    
-   Creacion de Categoria de productos (POST): http://localhost:3000/api/categoriaproductos/
+   * Creacion de Categoria de productos (POST): http://localhost:3000/api/categoriaproductos/
    
    {
    
@@ -110,7 +110,7 @@ Endpoints importantes creados:
    }
    
 
-    Actualiización de Categoria de productos (PUT): http://localhost:3000/api/categoriaproductos/idcategoriaproductos
+    * Actualiización de Categoria de productos (PUT): http://localhost:3000/api/categoriaproductos/idcategoriaproductos
   
     Nota: Este endpoint permite actualizar cualquier campo sin importar si se ingresa el campo o no
   
@@ -123,7 +123,7 @@ Endpoints importantes creados:
 
 5. Productos:
    
-   Creación de Productos (POST): http://localhost:3000/api/productos/
+   * Creación de Productos (POST): http://localhost:3000/api/productos/
   
    {
   
@@ -148,7 +148,7 @@ Endpoints importantes creados:
    }
   
 
-   Actualiización de productos (PUT): http://localhost:3000/api/productos/idproductos
+   * Actualiización de productos (PUT): http://localhost:3000/api/productos/idproductos
   
    Nota: Este endpoint permite actualizar cualquier campo sin importar si se ingresa el campo o no
   
@@ -163,7 +163,7 @@ Endpoints importantes creados:
 
 6. Orden (maestro-detalle)
    
-   Creación de Ordenes y detalles (POST): http://localhost:3000/api/orden/detalles/
+   * Creación de Ordenes y detalles (POST): http://localhost:3000/api/orden/detalles/
    
    {
    
@@ -185,36 +185,36 @@ Endpoints importantes creados:
    
     "detalles_orden": [
    
-        {
+     {
    
-            "productos_idproductos": idproducto,
+     "productos_idproductos": idproducto,
+
+     "cantidad": X,
    
-            "cantidad": X,
+     "precio": XX,
    
-            "precio": XX,
+     "subtotal": XX
    
-            "subtotal": XX
+     },
    
-        },
+     {
    
-        {
+     "productos_idproductos": idproducto,
    
-            "productos_idproductos": idproducto,
+     "cantidad": X,
    
-            "cantidad": X,
+     "precio": XX,
    
-            "precio": XX,
+     "subtotal": XX
    
-            "subtotal": XX
+     }
    
-        }
+     ]
    
-    ]
-   
-   }
+  }
    
 
-   Actualización de ordenes (PUT); http://localhost:3000/api/orden/detalles/idorden
+   * Actualización de ordenes (PUT); http://localhost:3000/api/orden/detalles/idorden
   
    Nota: Este endpoint permite actualizar cualquier campo sin importar si se ingresa el campo o no
   
