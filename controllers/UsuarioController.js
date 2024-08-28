@@ -117,7 +117,7 @@ exports.login = async (req, res) => {
     try
     {
         const usuario = await sequelize.query(
-        `Select contrasenia, nombre_completo
+        `Select contrasenia, nombre_completo, rol_idrol
          from usuarios where correo_electronico = :correo_electronico` ,
         {
             replacements: {
@@ -134,7 +134,9 @@ exports.login = async (req, res) => {
             //console.log(contraseñavalida);
 
             if(contraseñavalida) {
-                const datos = {"nombre": usuario[0].nombre_completo, "correo": correo_electronico}
+                const datos = {"nombre": usuario[0].nombre_completo, "correo": correo_electronico,
+                    "rol_idrol": usuario[0].rol_idrol
+                }
                 const token = generarToken(datos);
                 res.status(200).json({"token": token});
             }

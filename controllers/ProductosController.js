@@ -73,9 +73,7 @@ exports.actualizarProductos = async (req, res) => {
     }
 
     try {
-        if(campos.foto === undefined) {
-            await sequelize.query(
-           `EXEC ActualizarProductos @idproductos = :idproductos, 
+        const query1 = `EXEC ActualizarProductos @idproductos = :idproductos, 
             @categoriaproductos_idcategoriaproductos = :categoriaproductos_idcategoriaproductos, 
             @usuarios_idusuarios = :usuarios_idusuarios,
             @nombre = :nombre,
@@ -84,7 +82,10 @@ exports.actualizarProductos = async (req, res) => {
             @stock = :stock,
             @estados_idestados = :estados_idestados,
             @precio = :precio,
-            @fecha_creacion = :fecha_creacion`,
+            @fecha_creacion = :fecha_creacion`.toString();
+
+        if(campos.foto === undefined) {
+            await sequelize.query(query1,
             {
                 replacements: { 
                     idproductos,
@@ -107,18 +108,8 @@ exports.actualizarProductos = async (req, res) => {
         else {
             await sequelize.query(`declare @imagen varbinary(max); 
             select @imagen = BulkColumn
-            from OPENROWSET(BULK :foto, SINGLE_BLOB) as imagen;
-            EXEC ActualizarProductos @idproductos = :idproductos, 
-            @categoriaproductos_idcategoriaproductos = :categoriaproductos_idcategoriaproductos, 
-            @usuarios_idusuarios = :usuarios_idusuarios,
-            @nombre = :nombre,
-            @marca = :marca,
-            @codigo = :codigo, 
-            @stock = :stock,
-            @estados_idestados = :estados_idestados,
-            @precio = :precio,
-            @fecha_creacion = :fecha_creacion,
-            @foto = @imagen`,
+            from OPENROWSET(BULK :foto, SINGLE_BLOB) as imagen;` +
+            query1 + ` , @foto = @imagen`,
             {
                 replacements: { 
                     idproductos,
@@ -160,3 +151,29 @@ exports.verProductosActivos = async (req, res) => {
         res.status(400).json({message: "Error al cargar los productos"});
     }
 }
+
+exports.VerProductosPorCategoria = async (req, res) => {
+    const { categoriaproductos_idcategoriaproductos } = req.params;
+
+    try {
+        
+          const productos =  await sequelize.query(
+                `EXEC Ver_Productos_por_categoria
+                @categoriaproductos_idcategoriaproductos = :categoriaproductos_idcategoriaproductos`,
+            {
+                replacements: { 
+                    categoriaproductos_idcategoriaproductos
+                },
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+        res.status(200).json({productos});
+        
+        
+    }
+    catch (error) {
+        //console.error("Error al actualizar el producto", error)
+        res.status(500).json({message: "Error al ver los productos"});
+    }
+    
+};
