@@ -33,20 +33,20 @@ Todos los endpoint a excepcion de login están protegidos por un token y por el 
    
    * Creación de Estados (POST): http://localhost:3000/api/estados/
    
-   {
-   
-    "estado": "prueba"
-   
-   }
+     {
+     
+      "estado": "prueba"
+     
+     }
 
    
-      Actualiación de Estados (PUT): http://localhost:3000/api/estados/idestado
+   * Actualiación de Estados (PUT): http://localhost:3000/api/estados/idestado
    
-   {
-   
-    "estado": "prueba2"
-   
-   }
+     {
+     
+      "estado": "prueba2"
+     
+     }
 
 
 3. Usuarios:
