@@ -18,7 +18,7 @@ Endpoints importantes creados:
 
 (Todos los endpoint a excepcion de login están protegidos por un token y por el rol del usuario. El id del rol del usuario debe ser 1 (Operador administrativo) para acceder)
 
-1. login: http://localhost:3000/api/login
+1. login (POST): http://localhost:3000/api/login
    
    {
    
@@ -76,23 +76,23 @@ Endpoints importantes creados:
   
    Nota: Este endpoint permite actualizar cualquier campo sin importar si se ingresa el campo o no
   
-  Ejemplo 1:
+    Ejemplo 1:
   
-  {
+    {
   
     "correo_electronico": "correo2@dominio.com",
     
     "nombre_completo": "Nombre de persona 2"
     
-  }
+    }
   
-  Ejemplo 2:
+    Ejemplo 2:
   
-  {
+    {
   
     "contrasenia": "Nueva contraseña"
     
-  }
+    }
 
   
 4. Categoria de productos:
