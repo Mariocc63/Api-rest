@@ -110,22 +110,22 @@ Endpoints importantes creados:
    }
    
 
-  Actualiización de Categoria de productos (PUT): http://localhost:3000/api/categoriaproductos/idcategoriaproductos
+    Actualiización de Categoria de productos (PUT): http://localhost:3000/api/categoriaproductos/idcategoriaproductos
   
-  Nota: Este endpoint permite actualizar cualquier campo sin importar si se ingresa el campo o no
+    Nota: Este endpoint permite actualizar cualquier campo sin importar si se ingresa el campo o no
   
-  {
+   {
   
     "nombre": "Nuevo nombre de categoria"
     
-  }
+   }
   
 
 5. Productos:
    
-  Creación de Productos (POST): http://localhost:3000/api/productos/
+   Creación de Productos (POST): http://localhost:3000/api/productos/
   
-  {
+   {
   
     "categoriaproductos_idcategoriaproductos": idcategoriaproducto, 
     
@@ -145,20 +145,21 @@ Endpoints importantes creados:
     
     "foto": "ruta de imagen" (almacena la imagen, no la ruta)
     
-  }
+   }
   
 
-  Actualiización de productos (PUT): http://localhost:3000/api/productos/idproductos
+   Actualiización de productos (PUT): http://localhost:3000/api/productos/idproductos
   
-  Nota: Este endpoint permite actualizar cualquier campo sin importar si se ingresa el campo o no
+   Nota: Este endpoint permite actualizar cualquier campo sin importar si se ingresa el campo o no
   
-  {
+   {
   
     "marca": "Nueva marca",
     
     "foto": "Nueva ruta de imagen" (almacena la imagen, no la ruta)
     
-  }
+   }
+
 
 6. Orden (maestro-detalle)
    
@@ -166,9 +167,9 @@ Endpoints importantes creados:
    
    {
    
-    "usuarios_idusuarios": idusuario,
+   "usuarios_idusuarios": idusuario,
    
-    "estados_idestados": idestado,
+   "estados_idestados": idestado,
    
     "nombre_completo": "nombre cliente",
    
@@ -213,14 +214,14 @@ Endpoints importantes creados:
    }
    
 
-  Actualización de ordenes (PUT); http://localhost:3000/api/orden/detalles/idorden
+   Actualización de ordenes (PUT); http://localhost:3000/api/orden/detalles/idorden
   
-  Nota: Este endpoint permite actualizar cualquier campo sin importar si se ingresa el campo o no
+   Nota: Este endpoint permite actualizar cualquier campo sin importar si se ingresa el campo o no
   
-  {
+   {
   
-    "direccion": "direccion",
+   "direccion": "direccion",
     
-    "fecha_entrega": "YYYY-mm-dd"
+   "fecha_entrega": "YYYY-mm-dd"
     
-  {
+   }
