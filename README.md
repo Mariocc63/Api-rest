@@ -1,28 +1,32 @@
 # Api-rest
-repositorio para carrito de compras
+Repositorio para carrito de compras
 
-archivo index.js: archivo principal de la aplicacion del api-rest
+   archivo index.js: archivo principal de la aplicacion del api-rest
 
-archivo middleware.js: archivo con metodos para generacion, validacion de token y verificacion de rol con JWT
+   archivo middleware.js: archivo con metodos para generacion, validacion de token y verificacion de rol con JWT
 
-archivo config/database.js archivo de la conexion con la base de datos
+   archivo config/database.js archivo de la conexion con la base de datos
 
-archivo CarritoCompas.bak el último bakup de la base de datos
+   archivo CarritoCompas.bak el último bakup de la base de datos
 
-carpeta controllers: Todos los controladores y logica de negocio de los endpoints de la API
+   carpeta controllers: Todos los controladores y logica de negocio de los endpoints de la API
 
-carpeta Routes: Todas las rutas de los endpoint de la api
+   carpeta Routes: Todas las rutas de los endpoint de la api
 
 
 Endpoints importantes creados:
 (Todos los endpoint a excepcion de login están protegidos por un token y por el rol del usuario. El id del rol del usuario debe ser 1 (Operador administrativo) para acceder)
+
 1. login: http://localhost:3000/api/login
    {
+   
     "correo_electronico": "correodeprueba@gmail.com",
+   
     "contrasenia": "contraseña"
+   
    }
 
-2. Estados:
+3. Estados:
    Creación de Estados (POST): http://localhost:3000/api/estados/
    {
     "estado": "prueba"
@@ -32,7 +36,7 @@ Endpoints importantes creados:
     "estado": "prueba2"
    }
 
-3. Usuarios:
+4. Usuarios:
    Creación de Usuarios (POST): http://localhost:3000/api/usuario
    {
     "rol_idrol": idrol,
