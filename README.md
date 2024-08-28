@@ -69,12 +69,12 @@ Endpoints importantes creados:
    
     "fecha_nacimiento": "YYYY-mm-dd"
    
-  }
+    }
 
   
-    Actualización de Usuarios (PUT): http://localhost:3000/api/usuario/idusuario
+   Actualización de Usuarios (PUT): http://localhost:3000/api/usuario/idusuario
   
-    Nota: Este endpoint permite actualizar cualquier campo sin importar si se ingresa el campo o no
+   Nota: Este endpoint permite actualizar cualquier campo sin importar si se ingresa el campo o no
   
   Ejemplo 1:
   
