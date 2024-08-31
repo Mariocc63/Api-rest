@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const SECRET_KEY = '12345'; //palabra clave
+const dicciorioRoles = {"Operador administrativo": 1, "Cliente": 2}
 
 function generarToken (datos) {
         try {
@@ -39,4 +40,4 @@ function verificarRol(rol) {
 }
 
 
-module.exports = {autenticarToken,generarToken,verificarRol};
+module.exports = {autenticarToken,generarToken,verificarRol,dicciorioRoles};

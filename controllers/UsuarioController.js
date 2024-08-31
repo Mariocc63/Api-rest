@@ -6,8 +6,7 @@ const {generarToken} = require("../middleware.js");
 
 
 exports.crearUsuario= async (req,res) => {
-    const { rol_idrol, 
-        estados_idestados, 
+    const { rol_idrol,
         correo_electronico, 
         nombre_completo, 
         contrasenia, 
@@ -35,7 +34,6 @@ exports.crearUsuario= async (req,res) => {
         
                 await sequelize.query(
                     `EXEC InsertarUsuarios :rol_idrol,
-                     :estados_idestados,
                      :correo_electronico,
                      :nombre_completo,
                      :contrasenia,
@@ -43,8 +41,7 @@ exports.crearUsuario= async (req,res) => {
                      :fecha_nacimiento` ,
                     {
                         replacements: { 
-                            rol_idrol, 
-                            estados_idestados, 
+                            rol_idrol,  
                             correo_electronico, 
                             nombre_completo, 
                             contrasenia: contraseniaEncriptada, 
@@ -117,7 +114,7 @@ exports.login = async (req, res) => {
     try
     {
         const usuario = await sequelize.query(
-        `Select contrasenia, nombre_completo, rol_idrol
+        `Select idusuarios, contrasenia, nombre_completo, rol_idrol
          from usuarios where correo_electronico = :correo_electronico` ,
         {
             replacements: {
@@ -134,7 +131,9 @@ exports.login = async (req, res) => {
             //console.log(contraseñavalida);
 
             if(contraseñavalida) {
-                const datos = {"nombre": usuario[0].nombre_completo, "correo": correo_electronico,
+                const datos = {"idusuario": usuario[0].idusuarios, 
+                    "nombre": usuario[0].nombre_completo, 
+                    "correo": correo_electronico,
                     "rol_idrol": usuario[0].rol_idrol
                 }
                 const token = generarToken(datos);
@@ -149,6 +148,7 @@ exports.login = async (req, res) => {
         }
     }
     catch (error) {
+        //console.log(error);
         res.status(400).json({message: "Error al iniciar sesion"});
     }
 }

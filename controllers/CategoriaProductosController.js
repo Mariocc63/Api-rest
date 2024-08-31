@@ -2,9 +2,7 @@ const sequelize = require("../config/database").sequelize;
 
 exports.crearCategoriaProductos = async (req,res) => {
     const { 
-        usuarios_idusuarios, 
-        nombre,
-        estados_idestados} = req.body;
+        nombre} = req.body;
 
         const existecategoriaproducto = await sequelize.query("select * from categoriaproductos where nombre = :nombre",
             {
@@ -20,16 +18,14 @@ exports.crearCategoriaProductos = async (req,res) => {
         }
         else {
             try {
-
+                const usuarios_idusuarios = req.datos.datos.idusuario;
                 await sequelize.query(
                     `EXEC InsertarCategoriaProductos :usuarios_idusuarios,
-                    :nombre,
-                    :estados_idestados`,
+                    :nombre`,
                     {
                         replacements: { 
                             usuarios_idusuarios, 
-                            nombre,
-                            estados_idestados},
+                            nombre},
                         type: sequelize.QueryTypes.INSERT
                     }
                 );

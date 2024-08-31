@@ -5,35 +5,50 @@ const sequelize = require("../config/database").sequelize;
 
 exports.crearOrden= async (req,res) => {
     const { 
-        usuarios_idusuarios, 
-        estados_idestados, 
         nombre_completo,
         direccion, 
         telefono,
         correo_electronico, 
-        fecha_entrega, 
-        total_orden,
+        fecha_entrega,
         detalles_orden} = req.body;
 
         const transaccion = await sequelize.transaction();
 
     try {
 
-     
+        const usuarios_idusuarios = req.datos.datos.idusuario;
+        let total_orden = 0;
+
+        for(const detalle of detalles_orden) {
+            let subtotal = 0;
+            const {productos_idproductos,
+                cantidad} = detalle;
+
+            let precio = await sequelize.query(`select precio from productos
+                where idproductos = :productos_idproductos`, 
+            {
+                replacements: {
+                    productos_idproductos
+                },
+                type: sequelize.QueryTypes.SELECT
+            });
+            subtotal = precio[0].precio * cantidad;
+            total_orden += subtotal;
+            //console.log(precio);
+        }
+
         const [ResultadoOrden] = await sequelize.query(
             `EXEC InsertarOrdenes
-            :usuarios_idusuarios,
-            :estados_idestados,
-            :nombre_completo,
-            :direccion,
-            :telefono,
-            :correo_electronico, 
-            :fecha_entrega,
-            :total_orden` ,
+            @usuarios_idusuarios = :usuarios_idusuarios,
+            @nombre_completo = :nombre_completo,
+            @direccion = :direccion,
+            @telefono = :telefono,
+            @correo_electronico = :correo_electronico, 
+            @fecha_entrega = :fecha_entrega,
+            @total_orden = :total_orden` ,
             {
                 replacements: { 
                     usuarios_idusuarios, 
-                    estados_idestados, 
                     nombre_completo,
                     direccion,
                     telefono,
@@ -49,31 +64,42 @@ exports.crearOrden= async (req,res) => {
         //console.log(ResultadoOrden);
 
         for(const detalle of detalles_orden) {
+            let subtotal = 0;
             const {
                 productos_idproductos,
-                cantidad,
-                precio,
-                subtotal} = detalle;
+                cantidad
+            } = detalle;
 
-                await sequelize.query(
-                    `EXEC InsertarOrdenDetalles
-                    :orden_idorden,
-                    :productos_idproductos,
-                    :cantidad,
-                    :precio,
-                    :subtotal`,
-                    {
-                        replacements: {
-                            orden_idorden,
-                            productos_idproductos,
-                            cantidad,
-                            precio,
-                            subtotal
-                        },
-                        type: sequelize.QueryTypes.INSERT,
-                        transaccion
-                    }
-                );
+            let precio = await sequelize.query(`select precio from productos
+                where idproductos = :productos_idproductos`, 
+            {
+                replacements: {
+                    productos_idproductos
+                },
+                type: sequelize.QueryTypes.SELECT
+            });
+
+            subtotal = precio[0].precio * cantidad;
+
+            await sequelize.query(
+                `EXEC InsertarOrdenDetalles
+                :orden_idorden,
+                :productos_idproductos,
+                :cantidad,
+                :precio,
+                :subtotal`,
+                {
+                    replacements: {
+                        orden_idorden,
+                        productos_idproductos,
+                        cantidad,
+                        precio: precio[0].precio,
+                        subtotal
+                    },
+                    type: sequelize.QueryTypes.INSERT,
+                    transaccion
+                }
+            );
         }
 
         //console.log(orden_idorden);
@@ -85,7 +111,7 @@ exports.crearOrden= async (req,res) => {
     catch (error) {
         await transaccion.rollback();
         res.status(400).json({message: "Error al crear la orden y detalles de orden"});
-        //console.log(error);
+        console.log(error);
     }
 }
 

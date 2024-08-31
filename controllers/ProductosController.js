@@ -3,12 +3,10 @@ const sequelize = require("../config/database").sequelize;
 
 exports.crearProductos = async (req,res) => {
     const { categoriaproductos_idcategoriaproductos, 
-        usuarios_idusuarios,
         nombre,
         marca,
         codigo,
         stock,
-        estados_idestados,
         precio,
         foto} = req.body;
 
@@ -22,11 +20,11 @@ exports.crearProductos = async (req,res) => {
         );
     
         if(existeproducto.length > 0) {
-            res.status(400).json({message: "El estado a ingresar ya existe"})
+            res.status(400).json({message: "El producto a ingresar ya existe"})
         }
         else {
             try {
-
+                const usuarios_idusuarios = req.datos.datos.idusuario;
                 await sequelize.query(`declare @imagen varbinary(max);
                     select @imagen = BulkColumn
                     from OPENROWSET(BULK :foto, SINGLE_BLOB) as imagen;
@@ -37,7 +35,6 @@ exports.crearProductos = async (req,res) => {
                      :marca,
                      :codigo,
                      :stock,
-                     :estados_idestados,
                      :precio,
                      @foto = @imagen` ,
                     {
@@ -48,7 +45,6 @@ exports.crearProductos = async (req,res) => {
                             marca,
                             codigo,
                             stock,
-                            estados_idestados,
                             precio,
                             foto},
                         type: sequelize.QueryTypes.INSERT
