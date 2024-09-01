@@ -30,9 +30,10 @@ function autenticarToken(req, res, next)  {
 }
 
 function verificarRol(rol) {
-    return (req, res, next) => {
+    return  (req, res, next) => {
         if(req.datos.datos.rol_idrol !== rol) {
-            //console.log(req.usuario.rol_idrol)
+            //console.log(req.datos.datos.rol_idrol)
+            //console.log(rol);
             return res.status(403).json({message: "Acceso denegado"})
         }
         next();
