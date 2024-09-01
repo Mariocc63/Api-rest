@@ -2,10 +2,23 @@ const express = require("express");
 const router = express.Router();
 const ProductosController = require("../controllers/ProductosController.js");
 const {autenticarToken, verificarRol, dicciorioRoles} = require("../middleware.js")
+const multer = require("multer");
 
-router.post("/productos", autenticarToken, verificarRol(dicciorioRoles["Operador administrativo"]), 
+const almacenamiento = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images/'); // Carpeta de destino
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname); // Guardar con el nombre original del archivo
+    }
+});
+
+const subida = multer({ storage: almacenamiento });
+
+
+router.post("/productos", subida.single("foto") , autenticarToken, verificarRol(dicciorioRoles["Operador administrativo"]), 
 ProductosController.crearProductos);
-router.put("/productos/:idproductos", autenticarToken, verificarRol(dicciorioRoles["Operador administrativo"]),
+router.put("/productos/:idproductos", subida.single("foto"), autenticarToken, verificarRol(dicciorioRoles["Operador administrativo"]),
  ProductosController.actualizarProductos)
 router.get("/verproductos/", autenticarToken, verificarRol(dicciorioRoles["Operador administrativo"]), 
 ProductosController.verProductosActivos)

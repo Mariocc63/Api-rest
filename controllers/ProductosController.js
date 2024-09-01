@@ -1,14 +1,21 @@
 const sequelize = require("../config/database").sequelize;
+const path = require("path");
+const fs = require("fs");
+const { query } = require("express");
 
 
 exports.crearProductos = async (req,res) => {
-    const { categoriaproductos_idcategoriaproductos, 
+    const { 
+        categoriaproductos_idcategoriaproductos, 
         nombre,
         marca,
         codigo,
         stock,
-        precio,
-        foto} = req.body;
+        precio} = req.body;
+
+        const pcategoriaproductos_idcategoriaproductos = parseInt(categoriaproductos_idcategoriaproductos);
+        const pstock = parseInt(stock);
+        const pprecio = parseFloat(precio);
 
         const existeproducto = await sequelize.query("select * from productos where codigo = :codigo",
             {
@@ -23,39 +30,49 @@ exports.crearProductos = async (req,res) => {
             res.status(400).json({message: "El producto a ingresar ya existe"})
         }
         else {
-            try {
-                const usuarios_idusuarios = req.datos.datos.idusuario;
-                await sequelize.query(`declare @imagen varbinary(max);
-                    select @imagen = BulkColumn
-                    from OPENROWSET(BULK :foto, SINGLE_BLOB) as imagen;
-                    EXEC InsertarProductos
-                    :categoriaproductos_idcategoriaproductos,
-                    :usuarios_idusuarios,
-                     :nombre,
-                     :marca,
-                     :codigo,
-                     :stock,
-                     :precio,
-                     @foto = @imagen` ,
-                    {
-                        replacements: { 
-                            categoriaproductos_idcategoriaproductos, 
-                            usuarios_idusuarios,
-                            nombre,
-                            marca,
-                            codigo,
-                            stock,
-                            precio,
-                            foto},
-                        type: sequelize.QueryTypes.INSERT
-                    }
-                );
-                res.status(200).json({message: "Producto agregado correctamente"});
-            } 
-            catch (error) {
-                res.status(400).json({error: "Error al crear el producto"});
-                //console.log(error);
+            if(!req.file) {
+                //console.log(req.file);
+                res.status(400).json({message: "No se proporcionó una imagen"});
             }
+            else {
+                const filename = req.file.originalname;
+                //console.log(req.file);
+                const foto = path.join("images",filename);
+
+                try {
+                    const usuarios_idusuarios = req.datos.datos.idusuario;
+                    await sequelize.query(`
+                        EXEC InsertarProductos
+                        :categoriaproductos_idcategoriaproductos,
+                        :usuarios_idusuarios,
+                         :nombre,
+                         :marca,
+                         :codigo,
+                         :stock,
+                         :precio,
+                         :foto` ,
+                        {
+                            replacements: { 
+                                categoriaproductos_idcategoriaproductos: 
+                                pcategoriaproductos_idcategoriaproductos, 
+                                usuarios_idusuarios,
+                                nombre,
+                                marca,
+                                codigo,
+                                stock: pstock,
+                                precio: pprecio,
+                                foto},
+                            type: sequelize.QueryTypes.INSERT
+                        }
+                    );
+                    res.status(200).json({message: "Producto agregado correctamente"});
+                } 
+                catch (error) {
+                    res.status(400).json({error: "Error al crear el producto"});
+                    console.log(error);
+                }
+            }
+            
         }
 }
 
@@ -65,7 +82,7 @@ exports.actualizarProductos = async (req, res) => {
     const campos  = req.body;
 
     if(!idproductos || Object.keys(campos).length === 0) {
-        res.status(400).json({error: "No hay campos para actualizar"})
+        return res.status(400).json({error: "No hay campos para actualizar"})
     }
 
     try {
@@ -79,8 +96,8 @@ exports.actualizarProductos = async (req, res) => {
             @estados_idestados = :estados_idestados,
             @precio = :precio,
             @fecha_creacion = :fecha_creacion`.toString();
-
-        if(campos.foto === undefined) {
+        if(!req.file) {
+            
             await sequelize.query(query1,
             {
                 replacements: { 
@@ -97,15 +114,41 @@ exports.actualizarProductos = async (req, res) => {
                     //foto: campos.foto || null
                 },
                 type: sequelize.QueryTypes.UPDATE
-            }
-        );
-        res.status(200).json({message: "Actualizado correctamente"});
+            });
+             return res.status(200).json({message: "Actualizado correctamente"});
+            
         }
+
+        
         else {
-            await sequelize.query(`declare @imagen varbinary(max); 
-            select @imagen = BulkColumn
-            from OPENROWSET(BULK :foto, SINGLE_BLOB) as imagen;` +
-            query1 + ` , @foto = @imagen`,
+
+            const nuevaImagen = req.file.originalname;
+            const nuevaruta = path.join("images", nuevaImagen);
+
+            const [producto] = await sequelize.query(`Select foto 
+                from productos where idproductos = :idproductos`,
+            {
+                replacements: {
+                    idproductos
+                },
+                type: sequelize.QueryTypes.UPDATE
+            });
+
+            if(!producto) {
+                return res.status(404).json({message: "Producto no encontrado"});
+
+            }
+
+            if(producto.foto) {
+                const rutaImagenAntigua = path.join(__dirname, "..", "images", producto.foto)
+                fs.unlink(rutaImagenAntigua, (error) => {
+                    if(error) {
+                        return res.status(400).json({message: "Error al actualizar la imagen"})
+                    }
+                });
+            }
+
+            await sequelize.query(query1 + ` , @foto = :foto`,
             {
                 replacements: { 
                     idproductos,
@@ -118,18 +161,18 @@ exports.actualizarProductos = async (req, res) => {
                     estados_idestados: campos.estados_idestados || null,
                     precio: campos.precio || null,
                     fecha_creacion: campos.fecha_creacion || null,
-                    foto: campos.foto || null
+                    foto: nuevaruta || null
                 },
                 type: sequelize.QueryTypes.UPDATE
             }
         );
-        res.status(200).json({message: "Actualizado correctamente"});
+            return res.status(200).json({message: "Actualizado correctamente"});
         }
         
     }
     catch (error) {
-        //console.error("Error al actualizar el producto", error)
-        res.status(500).json({message: "Error al actualizar el producto"});
+        console.error("Error al actualizar el producto", error)
+        return res.status(500).json({message: "Error al actualizar el producto"});
     }
     
 };

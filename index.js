@@ -9,6 +9,8 @@ const categoriaproductosRoutes = require("./routes/CategoriaProductosRoute.js")
 const productosRoutes = require("./routes/ProductosRoute.js")
 const ordenRoutes = require("./routes/OrdenRoute.js")
 
+
+
 app.use(express.json());
 app.use("/api", estadoRoutes)
 app.use("/api", usuarioRoutes)
